@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
+from pathlib import Path
 from flask_gravatar import Gravatar
 import os
 
@@ -20,6 +21,8 @@ gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=Fa
 
 
 # CONNECT TO DB
+# _project_root = Path(__file__).resolve().parent.parent
+# _default_sqlite_db = _project_root /"blog.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///blog.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -34,7 +37,7 @@ def load_user(user_id):
 
 # CONFIGURE TABLE
 class User(UserMixin, db.Model):
-    __tablename__ = "users"
+    __tablename__ = "User"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
@@ -44,9 +47,9 @@ class User(UserMixin, db.Model):
 
 
 class BlogPost(db.Model):
-    __tablename__ = "blog_posts"
+    __tablename__ = "BlogPost"
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    author_id = db.Column(db.Integer, db.ForeignKey("User.id"))
     author = relationship("User", back_populates="posts")
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
@@ -57,10 +60,10 @@ class BlogPost(db.Model):
 
 
 class Comment(db.Model):
-    __tablename__ = "comments"
+    __tablename__ = "Comment"
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
-    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    post_id = db.Column(db.Integer, db.ForeignKey("BlogPost.id"))
+    author_id = db.Column(db.Integer, db.ForeignKey("User.id"))
     parent_post = relationship("BlogPost", back_populates="comments")
     comment_author = relationship("User", back_populates="comments")
     text = db.Column(db.Text, nullable=False)
