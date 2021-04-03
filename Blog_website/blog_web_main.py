@@ -21,9 +21,9 @@ gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=Fa
 
 
 # CONNECT TO DB
-# _project_root = Path(__file__).resolve().parent.parent
-# _default_sqlite_db = _project_root /"blog.db"
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///blog.db')
+_project_root = Path(__file__).resolve().parent.parent
+_default_sqlite_db = _project_root /"Blog_website"/"blog.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', f'sqlite:///{_default_sqlite_db}')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
