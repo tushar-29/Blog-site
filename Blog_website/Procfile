@@ -1,1 +1,1 @@
-web: gunicorn blog_login_main:app
+web: gunicorn blog_web_main:app
