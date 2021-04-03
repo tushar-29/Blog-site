@@ -1,0 +1,1 @@
+web: gunicorn blog_login_main:app
