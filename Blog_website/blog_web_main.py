@@ -12,17 +12,15 @@ from pathlib import Path
 from flask_gravatar import Gravatar
 import os
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "ewrTjo@wWEiudzw132")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
-
 # CONNECT TO DB
 _project_root = Path(__file__).resolve().parent.parent
-_default_sqlite_db = _project_root /"Blog_website"/"blog.db"
+_default_sqlite_db = _project_root / "Blog_website" / "blog.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', f'sqlite:///{_default_sqlite_db}')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
@@ -78,6 +76,7 @@ def admin_only(f):
         if current_user.id != 1:
             return abort(403)
         return f(*args, **kwargs)
+
     return decorated_function
 
 
@@ -99,9 +98,9 @@ def register():
             return redirect(url_for('login'))
 
         hash_and_salted_password = generate_password_hash(
-                form.password.data,
-                method='pbkdf2:sha256',
-                salt_length=8
+            form.password.data,
+            method='pbkdf2:sha256',
+            salt_length=8
         )
         new_user = User(
             email=form.email.data,
