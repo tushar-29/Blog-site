@@ -46,7 +46,7 @@ class User(UserMixin, db.Model):
     comments = relationship("Comment", back_populates="comment_author")
 
 
-class BlogPost(db.Model):
+class BlogPost(UserMixin, db.Model):
     __tablename__ = "BlogPost"
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey("User.id"))
